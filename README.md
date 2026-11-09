@@ -25,9 +25,9 @@ Sources:
 - [Crown Paints — coverage guidance](https://www.crownpaints.co.uk/)
 - Standard decorating practice for openings (door ~1.5 m², window ~1.4 m²) and coats.
 
-## Dab
+## Bristle
 
-Dab is a little paintbrush in the corner. Tap for a tip that fits what you're measuring — starting out, adding a ceiling, doing woodwork, or a big colour change. Everything Dab says is announced to a screen reader, and it holds still if you've asked for reduced motion.
+Bristle is a little paintbrush in the corner. Tap for a tip that fits what you're measuring — starting out, adding a ceiling, doing woodwork, or a big colour change. Everything Bristle says is announced to a screen reader, and it holds still if you've asked for reduced motion.
 
 ## Run it
 

@@ -2,7 +2,7 @@
   "name": "brushup",
   "version": "0.1.0",
   "private": true,
-  "description": "Measure a room and work out the paint to buy: the litres for your coats and the tins with the least left over. Walls, ceiling and woodwork. Runs in the browser, nothing uploaded. With Dab the brush.",
+  "description": "Measure a room and work out the paint to buy: the litres for your coats and the tins with the least left over. Walls, ceiling and woodwork. Runs in the browser, nothing uploaded. With Bristle the brush.",
   "scripts": {
     "test": "node --test"
   },

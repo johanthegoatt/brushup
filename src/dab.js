@@ -1,9 +1,9 @@
-// Dab, the friendly paintbrush in the corner. Dab offers a tip when tapped and
-// changes the tip to match what you're measuring: starting out, adding a
-// ceiling, doing woodwork, or a big colour change. The app tells Dab the
-// context; Dab never changes it on a timer of its own. Everything Dab says goes
-// through the bubble's live region so a screen reader hears it, and Dab holds
-// still if you have asked for reduced motion.
+// Bristle, the friendly paintbrush in the corner. Bristle offers a tip when
+// tapped and changes the tip to match what you're measuring: starting out,
+// adding a ceiling, doing woodwork, or a big colour change. The app tells
+// Bristle the context; Bristle never changes it on a timer of its own.
+// Everything Bristle says goes through the bubble's live region so a screen
+// reader hears it, and Bristle holds still if you have asked for reduced motion.
 (function () {
   "use strict";
   var btn = document.getElementById("dab");
@@ -16,7 +16,7 @@
 
   var TIPS = {
     start: [
-      "Hi, I'm Dab. Pop in the room size and I'll tell you how much paint to buy and which tins.",
+      "Hi, I'm Bristle. Pop in the room size and I'll tell you how much paint to buy and which tins.",
       "Walls are perimeter times height. I take the doors and windows off, since you don't paint those.",
       "Most walls want two coats. One only covers if you're going over the same colour in good nick."
     ],
