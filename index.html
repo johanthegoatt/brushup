@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brushup — how much paint to buy for a room</title>
+<meta name="description" content="Measure a room and Brushup works out the paint: the litres for your coats and the tins to buy with the least left over. Walls, ceiling and woodwork. Runs in your browser, nothing uploaded.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%232f9e8f'/><rect x='29' y='8' width='6' height='26' rx='2' fill='%23c9a227'/><rect x='24' y='32' width='16' height='9' rx='2' fill='%23b9b2a4'/><path d='M23 41 h18 v10 a9 9 0 0 1 -18 0 z' fill='%23eef1ee'/></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="wrap">
+  <header class="intro">
+    <h1>Brushup</h1>
+    <p class="lede">Measure the room, pick your coats, and Brushup works out the litres and the tins to buy with the least left over.</p>
+  </header>
+
+  <section class="panel" aria-label="The room">
+    <h2 class="panel__h">The room</h2>
+    <div class="grid">
+      <label class="field">Length (m)
+        <input type="number" id="len" min="0" step="0.1" inputmode="decimal" value="4">
+      </label>
+      <label class="field">Width (m)
+        <input type="number" id="wid" min="0" step="0.1" inputmode="decimal" value="3">
+      </label>
+      <label class="field">Wall height (m)
+        <input type="number" id="hgt" min="0" step="0.1" inputmode="decimal" value="2.4">
+      </label>
+    </div>
+    <div class="grid">
+      <label class="field">Doors
+        <input type="number" id="doors" min="0" step="1" inputmode="numeric" value="1">
+      </label>
+      <label class="field">Windows
+        <input type="number" id="windows" min="0" step="1" inputmode="numeric" value="1">
+      </label>
+      <label class="field">Coats
+        <select id="coats">
+          <option value="1">1 coat</option>
+          <option value="2" selected>2 coats</option>
+          <option value="3">3 coats</option>
+        </select>
+      </label>
+    </div>
+    <div class="grid">
+      <label class="field">Wall paint
+        <select id="paint"></select>
+      </label>
+      <label class="field">Price per litre (optional)
+        <input type="number" id="price" min="0" step="0.5" inputmode="decimal" placeholder="£">
+      </label>
+    </div>
+    <label class="check"><input type="checkbox" id="strong"> Big colour change (dark to light)</label>
+  </section>
+
+  <section class="panel" aria-label="Also painting">
+    <h2 class="panel__h">Also painting?</h2>
+    <label class="check"><input type="checkbox" id="doCeiling"> Ceiling <span class="hint" id="ceilHint"></span></label>
+    <div class="check-row">
+      <label class="check"><input type="checkbox" id="doWood"> Woodwork (skirting, doors, frames)</label>
+      <label class="field field--inline" id="woodAreaWrap" hidden>Area (m²)
+        <input type="number" id="woodArea" min="0" step="0.5" inputmode="decimal" value="8">
+      </label>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="share" class="btn">Share link</button>
+      <button type="button" id="reset" class="btn btn--quiet">Reset</button>
+    </div>
+  </section>
+
+  <section id="out" class="out" aria-live="polite" aria-label="Paint to buy"></section>
+
+  <section class="notes">
+    <h2>How it reads</h2>
+    <p>Wall area is the room's perimeter times its height, less the door and window openings. Litres are <strong>area × coats ÷ spread rate</strong>, where the spread rate is how far a litre goes in one coat — about <strong>12 m² per litre</strong> for emulsion, less for primer and exterior masonry, more for trim paint. Brushup adds a touch-up allowance on top and rounds up to whole tins, choosing the tins that leave the least paint over.</p>
+    <p>Two coats is the norm. One coat only covers when you're going over the same colour in good condition; a big colour change often wants three, or a tinted primer first. The ceiling is its own tin (its area is just the floor), and woodwork uses gloss or satinwood, not wall paint, so that's separate too.</p>
+    <p>Spread rates shown are typical; the exact figure is on the tin and depends on the surface — bare plaster soaks up the first coat. Figures follow <a href="https://www.dulux.co.uk/" rel="noopener">Dulux</a> and <a href="https://www.crownpaints.co.uk/" rel="noopener">Crown</a> product coverage and standard decorating guidance on openings and coats.</p>
+    <p class="fineprint">Brushup is a buying guide, not a spec. Awkward shapes, heavy texture, sprayers and strong colours all change the real figure, so keep the receipt and a spare tin.</p>
+  </section>
+</main>
+
+<button id="dab" class="dab" aria-label="Dab the brush — tap for a tip">
+  <svg viewBox="0 0 64 64" width="52" height="52" aria-hidden="true">
+    <rect x="29" y="6" width="6" height="24" rx="3" fill="#c9a227"/>
+    <rect x="23" y="28" width="18" height="9" rx="2" fill="#b9b2a4"/>
+    <path id="dab-bristles" d="M22 37 h20 v10 a10 10 0 0 1 -20 0 z" fill="#eef1ee"/>
+    <circle cx="28" cy="44" r="2.2" fill="#2a2a26"/>
+    <circle cx="36" cy="44" r="2.2" fill="#2a2a26"/>
+    <path id="dab-mouth" d="M27 49 Q32 53 37 49" fill="none" stroke="#2a2a26" stroke-width="2.4" stroke-linecap="round"/>
+  </svg>
+</button>
+<div id="dab-bubble" class="dab-bubble" role="status" aria-live="polite"></div>
+
+<script src="src/core.js"></script>
+<script src="src/dab.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
