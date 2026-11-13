@@ -165,6 +165,20 @@
     } catch (e) { return false; }
   }
 
+  // Picking what you're painting over sets the coats and explains why. The
+  // coats stay editable afterwards.
+  var situationEl = $("situation");
+  if (situationEl) {
+    situationEl.addEventListener("change", function () {
+      var note = $("situation-note");
+      var s = window.Brushup.coatsFor(situationEl.value);
+      if (!s) { if (note) note.hidden = true; return; }
+      els.coats.value = String(s.coats);
+      if (note) { note.hidden = false; note.textContent = s.label + ": " + s.note; }
+      compute();
+    });
+  }
+
   // Wire it all up: any change recomputes.
   ["input", "change"].forEach(function (ev) {
     [els.len, els.wid, els.hgt, els.doors, els.windows, els.coats, els.paint,

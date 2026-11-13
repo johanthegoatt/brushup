@@ -42,7 +42,17 @@
           <option value="3">3 coats</option>
         </select>
       </label>
+      <label class="field">Not sure? What you're painting over
+        <select id="situation">
+          <option value="">— pick to set the coats —</option>
+          <option value="standard">Same-ish colour, sound wall</option>
+          <option value="big-change">Big or dark-to-light change</option>
+          <option value="fresh-plaster">Bare new plaster</option>
+          <option value="refresh">Freshening the same colour</option>
+        </select>
+      </label>
     </div>
+    <p id="situation-note" class="note-line" hidden></p>
     <div class="grid">
       <label class="field">Wall paint
         <select id="paint"></select>

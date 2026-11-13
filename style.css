@@ -114,3 +114,5 @@ select:focus-visible, input:focus-visible, .btn:focus-visible, .dab:focus-visibl
 .dab-bubble.show { opacity: 1; transform: translateY(0); }
 @keyframes wiggle { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-9deg); } 75% { transform: rotate(9deg); } }
 @media (prefers-reduced-motion: reduce) { .dab.wiggle { animation: none; } }
+
+.note-line { margin: 2px 0 0; font-size: .88rem; color: var(--muted, #6b6b6b); }
