@@ -226,8 +226,33 @@
     return out;
   }
 
+  // How many coats a job really needs, by what you're painting over. Guessing
+  // the coats is the usual reason a room ends up a tin short or the old colour
+  // grins through. Bare new plaster wants a thinned "mist coat" first to seal
+  // it; a strong or dark-to-light change wants a third coat or a tinted
+  // undercoat; freshening the same colour can take one. Follows Dulux and Crown
+  // decorating guidance on new plaster and colour changes.
+  var SITUATIONS = {
+    "standard":     { label: "Same-ish colour, sound wall", coats: 2, mist: false,
+      note: "The usual: two coats over a sound wall in a similar colour." },
+    "big-change":   { label: "Big or dark-to-light colour change", coats: 3, mist: false,
+      note: "A strong colour or a dark-to-light change: allow three coats, or a tinted undercoat first, so the old colour doesn't grin through." },
+    "fresh-plaster":{ label: "Bare new plaster", coats: 2, mist: true,
+      note: "Seal it with a watered-down “mist coat” first (emulsion thinned about 70:30 with water), then two full coats. The mist coat soaks in, so don't count it as cover." },
+    "refresh":      { label: "Freshening the same colour", coats: 1, mist: false,
+      note: "Freshening the same colour in good condition: one coat often does it. Check once it's dry." }
+  };
+
+  function coatsFor(situation) {
+    var s = SITUATIONS[situation];
+    if (!s) return null;
+    return { situation: situation, label: s.label, coats: s.coats, mist: s.mist, note: s.note };
+  }
+
   return {
     PAINTS: PAINTS,
+    SITUATIONS: SITUATIONS,
+    coatsFor: coatsFor,
     TIN_SIZES: TIN_SIZES,
     TRIM_TINS: TRIM_TINS,
     DOOR_AREA: DOOR_AREA,

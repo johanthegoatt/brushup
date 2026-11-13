@@ -122,3 +122,19 @@ test("an empty room needs no paint", () => {
   assert.strictEqual(r.walls.bought, 0);
   assert.strictEqual(r.walls.tins.length, 0);
 });
+
+test("coats go up for a big colour change and down for a refresh", function () {
+  assert.strictEqual(B.coatsFor("standard").coats, 2);
+  assert.strictEqual(B.coatsFor("big-change").coats, 3);
+  assert.strictEqual(B.coatsFor("refresh").coats, 1);
+});
+
+test("new plaster calls for a mist coat first", function () {
+  var r = B.coatsFor("fresh-plaster");
+  assert.strictEqual(r.mist, true);
+  assert.match(r.note, /mist coat/i);
+});
+
+test("an unknown situation gives no suggestion", function () {
+  assert.strictEqual(B.coatsFor("underwater"), null);
+});
