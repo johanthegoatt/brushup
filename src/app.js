@@ -9,7 +9,7 @@
   var els = {
     len: $("len"), wid: $("wid"), hgt: $("hgt"),
     doors: $("doors"), windows: $("windows"), coats: $("coats"),
-    paint: $("paint"), price: $("price"), strong: $("strong"),
+    paint: $("paint"), surface: $("surface"), price: $("price"), strong: $("strong"),
     doCeiling: $("doCeiling"), doWood: $("doWood"),
     woodArea: $("woodArea"), woodAreaWrap: $("woodAreaWrap"),
     out: $("out"), ceilHint: $("ceilHint")
@@ -23,6 +23,16 @@
       els.paint.appendChild(o);
     });
     els.paint.value = "matt";
+  }
+
+  function surfaceOptions() {
+    B.SURFACES.forEach(function (s) {
+      var o = document.createElement("option");
+      o.value = s.id;
+      o.textContent = s.label;
+      els.surface.appendChild(o);
+    });
+    els.surface.value = "smooth";
   }
 
   function numVal(el, fallback) {
@@ -54,6 +64,7 @@
         windows: Math.floor(numVal(els.windows, 0))
       },
       strongColour: els.strong.checked,
+      surface: els.surface.value,
       walls: {
         paint: els.paint.value, coats: Number(els.coats.value) || 2,
         pricePerLitre: price
@@ -134,6 +145,7 @@
       l: p.room.length, w: p.room.width, h: p.room.height,
       d: p.openings.doors, wn: p.openings.windows,
       c: p.walls.coats, pt: p.walls.paint, pr: els.price.value,
+      sf: els.surface.value,
       sc: p.strongColour ? 1 : 0,
       ce: els.doCeiling.checked ? 1 : 0,
       wd: els.doWood.checked ? 1 : 0, wa: p.woodwork.area
@@ -156,6 +168,7 @@
       if (p.wn != null) els.windows.value = p.wn;
       if (p.c != null) els.coats.value = String(p.c);
       if (p.pt) els.paint.value = p.pt;
+      if (p.sf) els.surface.value = p.sf;
       if (p.pr != null) els.price.value = p.pr;
       els.strong.checked = !!p.sc;
       els.doCeiling.checked = !!p.ce;
@@ -181,7 +194,7 @@
 
   // Wire it all up: any change recomputes.
   ["input", "change"].forEach(function (ev) {
-    [els.len, els.wid, els.hgt, els.doors, els.windows, els.coats, els.paint,
+    [els.len, els.wid, els.hgt, els.doors, els.windows, els.coats, els.paint, els.surface,
      els.price, els.strong, els.doCeiling, els.doWood, els.woodArea].forEach(function (el) {
       el.addEventListener(ev, compute);
     });
@@ -191,7 +204,7 @@
     location.hash = "";
     els.len.value = "4"; els.wid.value = "3"; els.hgt.value = "2.4";
     els.doors.value = "1"; els.windows.value = "1"; els.coats.value = "2";
-    els.paint.value = "matt"; els.price.value = ""; els.strong.checked = false;
+    els.paint.value = "matt"; els.surface.value = "smooth"; els.price.value = ""; els.strong.checked = false;
     els.doCeiling.checked = false; els.doWood.checked = false; els.woodArea.value = "8";
     compute();
   });
@@ -206,6 +219,7 @@
   });
 
   wallPaintOptions();
+  surfaceOptions();
   readHash();
   compute();
 })();
