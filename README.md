@@ -10,6 +10,7 @@ Live: https://brushup.johanthegoat.xyz
 - **Turns area into litres.** Litres are area × coats ÷ spread rate — how far a litre goes in one coat, about 12 m² for emulsion, less for primer and exterior masonry, more for trim paint. A touch-up allowance goes on top.
 - **Picks the tins.** It rounds up to whole tins (10 L, 5 L, 2.5 L, 1 L) and chooses the combination that leaves the least paint over, with the total bought, what's left, and the cost if you give a price per litre.
 - **Ceiling and woodwork too.** Tick the ceiling (its area is the floor) and it gets its own tin; tick woodwork and it uses gloss or satinwood trim paint in its own tins, including 750 ml.
+- **Textured surfaces.** A textured or rough wall holds paint in the relief, so a litre covers less. Pick the surface (smooth, textured, heavily textured, rough) and the coverage is cut to match (down to 55% for bare brick or pebbledash), which raises the litres. Dulux and Crown both flag reduced coverage on porous, rough or textured surfaces.
 - **Flags the colour change.** Going dark to light? Brushup reminds you that often wants a third coat or a tinted primer first.
 - **A share link** that reopens the same room. The whole form lives in the link's `#fragment`, which a browser never sends to a server, so nothing you enter is uploaded.
 
