@@ -40,6 +40,22 @@
   var PAINT_BY_ID = {};
   PAINTS.forEach(function (p) { PAINT_BY_ID[p.id] = p; });
 
+  // How much a textured or rough surface cuts paint coverage. A smooth wall
+  // takes the full spread rate; a textured one holds paint in the relief, so a
+  // litre covers less and you buy more. Manufacturers (Dulux, Crown) flag
+  // reduced coverage on porous, rough or textured surfaces. These factors
+  // multiply the spread rate, so a factor of 0.8 means a litre covers 80% as
+  // much as on a smooth wall.
+  var SURFACES = [
+    { id: "smooth",   label: "Smooth (plaster, lining paper)",        factor: 1 },
+    { id: "textured", label: "Textured (textured paper, light Artex)", factor: 0.8 },
+    { id: "heavy",    label: "Heavily textured (deep Artex, woodchip)", factor: 0.65 },
+    { id: "rough",    label: "Rough (bare brick, pebbledash)",         factor: 0.55 }
+  ];
+  var SURFACE_BY_ID = {};
+  SURFACES.forEach(function (s) { SURFACE_BY_ID[s.id] = s; });
+  function surfaceFactor(id) { var s = SURFACE_BY_ID[id]; return s ? s.factor : 1; }
+
   // Tin sizes stocked for emulsion (litres), largest first. Trim paint also
   // comes in 750 ml, added in when the job is woodwork.
   var TIN_SIZES = [10, 5, 2.5, 1];
@@ -134,7 +150,11 @@
     var spread = opts.spread != null ? Math.max(1, num(opts.spread, 12)) : spreadOf(opts.paint);
     var extraPct = opts.extraPercent != null ? num(opts.extraPercent, 10) : 10;
 
-    var litresBare = net * coats / spread;
+    // A textured surface holds more paint, so the effective spread rate drops.
+    var sFactor = opts.surfaceFactor != null ? Math.max(0.2, num(opts.surfaceFactor, 1)) : 1;
+    var effSpread = spread * sFactor;
+
+    var litresBare = net * coats / effSpread;
     var litres = litresBare * (1 + extraPct / 100);
     var sizes = PAINT_BY_ID[opts.paint] && PAINT_BY_ID[opts.paint].use === "wood" ? TRIM_TINS : TIN_SIZES;
     var picked = pickTins(litres, opts.tinSizes || sizes);
@@ -147,6 +167,8 @@
       area: round2(net),
       coats: coats,
       spread: spread,
+      surfaceFactor: sFactor,
+      effectiveSpread: round1(effSpread),
       litres: round2(litres),
       litresExact: litres,
       tins: picked.tins,
@@ -174,6 +196,7 @@
       out.walls = job({
         area: netWall, coats: w.coats != null ? w.coats : 2,
         paint: w.paint || "matt", extraPercent: extraPct,
+        surfaceFactor: surfaceFactor(opts.surface),
         pricePerLitre: w.pricePerLitre, tinSizes: opts.tinSizes
       });
       out.walls.grossArea = round2(gross);
@@ -186,6 +209,7 @@
       out.ceiling = job({
         area: ceilingArea(room), coats: c.coats != null ? c.coats : 2,
         paint: c.paint || "ceiling", extraPercent: extraPct,
+        surfaceFactor: surfaceFactor(opts.surface),
         pricePerLitre: c.pricePerLitre
       });
       jobs.push(out.ceiling);
@@ -214,6 +238,12 @@
     };
 
     // Plain-word guidance.
+    var sf = surfaceFactor(opts.surface);
+    if (sf < 1) {
+      var sLabel = (SURFACE_BY_ID[opts.surface] || {}).label || "textured";
+      out.notes.push("A " + sLabel.toLowerCase() + " surface holds more paint, so a litre covers less than on a smooth wall. I've cut the coverage to " +
+        Math.round(sf * 100) + "% here, which is why the litres are up.");
+    }
     if (out.walls && out.walls.coats < 2) {
       out.notes.push("One coat rarely covers. Two is the norm unless you're going over the same colour in good condition.");
     }
@@ -251,6 +281,8 @@
 
   return {
     PAINTS: PAINTS,
+    SURFACES: SURFACES,
+    surfaceFactor: surfaceFactor,
     SITUATIONS: SITUATIONS,
     coatsFor: coatsFor,
     TIN_SIZES: TIN_SIZES,
