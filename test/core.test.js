@@ -138,3 +138,36 @@ test("new plaster calls for a mist coat first", function () {
 test("an unknown situation gives no suggestion", function () {
   assert.strictEqual(B.coatsFor("underwater"), null);
 });
+
+test("a textured surface cuts coverage so litres go up", () => {
+  const smooth = B.job({ area: 48, coats: 2, paint: "matt", surfaceFactor: 1, extraPercent: 0 });
+  const textured = B.job({ area: 48, coats: 2, paint: "matt", surfaceFactor: 0.8, extraPercent: 0 });
+  assert.strictEqual(textured.effectiveSpread, 9.6);
+  // smooth: 48*2/12 = 8 L; textured: 48*2/9.6 = 10 L
+  assert.ok(textured.litresExact > smooth.litresExact);
+  assert.strictEqual(Math.round(textured.litresExact * 10) / 10, 10);
+});
+
+test("surfaceFactor maps the ids and defaults to smooth", () => {
+  assert.strictEqual(B.surfaceFactor("smooth"), 1);
+  assert.strictEqual(B.surfaceFactor("textured"), 0.8);
+  assert.strictEqual(B.surfaceFactor("rough"), 0.55);
+  assert.strictEqual(B.surfaceFactor("nonsense"), 1);
+});
+
+test("plan applies the surface to walls and ceiling and notes it", () => {
+  const p = B.plan({
+    room: { length: 4, width: 3, height: 2.4 },
+    surface: "heavy",
+    ceiling: { include: true }
+  });
+  assert.strictEqual(p.walls.surfaceFactor, 0.65);
+  assert.strictEqual(p.ceiling.surfaceFactor, 0.65);
+  assert.ok(p.notes.some(function (n) { return /covers less|coverage/.test(n); }));
+});
+
+test("a smooth plan adds no texture note", () => {
+  const p = B.plan({ room: { length: 4, width: 3, height: 2.4 }, surface: "smooth" });
+  assert.strictEqual(p.walls.surfaceFactor, 1);
+  assert.ok(!p.notes.some(function (n) { return /holds more paint/.test(n); }));
+});
